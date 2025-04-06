@@ -1,0 +1,27 @@
+module.exports = {
+  publicPath: "/",
+  include: [
+    "/",
+    "/Projects",
+    "/service",
+    "/Aboutus",
+    "/ArchitectureDesign",
+    "/ProjectManagement",
+    "/Developmentplanning",
+    "/BuildingContracting",
+    "/EngineeringConsultancy",
+    "/RealEstate",
+    "/InteriorDesign",
+    "/Fit-OutDesig",
+    "/Contact",
+    "/Product",
+    "/booking",
+  ], // أضف جميع الروابط هنا
+  source: "build",
+  destination: "build",
+  userAgent: "ReactSnap",
+  concurrency: 4,
+  cache: true,
+  preloadImages: true,
+  skipThirdPartyRequests: true,
+};
