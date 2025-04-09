@@ -67,11 +67,10 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "start": "react-scripts start",
-    "build": "react-scripts build && react-snap",
-    "postbuild": "react-snap",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "serve": "serve -s build"
+    "serve": "serve -s build",
+    "build": "react-scripts build"
   },
   "eslintConfig": {
     "extends": [

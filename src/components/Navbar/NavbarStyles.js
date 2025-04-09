@@ -1,7 +1,71 @@
 import { Container } from "../../Globalstyles";
 import { Link } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
+// In your NavbarStyles.js
+// Update your NavbarStyles.js
+export const Text = styled.h1`
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  position: relative;
+  color: black;
 
+  &:hover {
+    color: #66a109;
+  }
+
+  &[data-active="true"] {
+    color: #66a109;
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: #66a109;
+      transform: scaleX(1);
+    }
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #66a109;
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+  }
+`;
+
+// Remove any .is-active or click-based active styles from your CSS
+
+export const NavItem = styled.li`
+  height: 80px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+
+    ${Text} {
+      color: #66a109;
+    }
+  }
+
+  @media screen and (max-width: 960px) {
+    width: 100%;
+    &:hover {
+      border: none;
+      transform: none;
+    }
+  }
+`;
 const rotate = keyframes`
   from {
     transform: rotate(0deg);
@@ -20,29 +84,37 @@ export const Nav = styled.nav`
   animation: 2s;
   display: flex;
   justify-content: center;
-  align-items: center;
-  z-index: 50;
-  width: 100%;
-  border-radius: 9px;
-  margin-top: 15px;
+  top: 15px; /* Adjusted top position */
 
-  /* Sticky behavior */
+  align-items: center;
+  width: 100%;
+  z-index: 50;
+  background: transparent;
+  transition: all 0.3s ease;
+
   &.sticky {
-    position: sticky; /* Change to sticky when scrolled */
-    margin-top: 15px;
+    position: fixed;
+    top: 0;
+    backdrop-filter: blur(10px); /* Adds glass effect */
   }
 `;
 
 export const NavbarContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: auto;
   align-items: center;
   width: 97%;
   border-radius: 9px;
   height: 65px;
-  background-color: #ebe9e9;
+  background-color: rgba(235, 233, 233, 0.55); /* Semi-transparent */
+  backdrop-filter: blur(25px); /* Glass effect */
+  border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle border */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* Soft shadow */
   ${Container}
+
+  @media (max-width: 960px) {
+    background-color: rgba(235, 233, 233, 0.9); /* More opaque for mobile */
+  }
 `;
 
 export const NavLogo = styled(Link)`
@@ -106,19 +178,6 @@ export const NavMenu = styled.ul`
   }
 `;
 
-export const NavItem = styled.li`
-  height: 80px;
-  cursor: pointer;
-  margin-top: 10px;
-
-  @media screen and (max-width: 960px) {
-    width: 100%;
-
-    &:hover {
-      border: none;
-    }
-  }
-`;
 export const Li = styled.li`
   display: inline-flex;
   list-style: none;
@@ -162,20 +221,11 @@ export const NavLinks = styled.span`
     }
   }
 `;
-export const Text = styled.h1`
-  font-size: 13px;
-  font-weight: 500;
-  &:hover {
-    color: #66a109;
-    transition: all 0.3s ease;
-  }
-`;
 
 export const NavBtnLink = styled(Link)`
   display: flex;
   justify-content: center;
   align-items: center;
-
   text-decoration: none;
   padding: 8px 16px;
   height: 100%;

@@ -71,6 +71,18 @@ const TestimonialSlider = () => {
         logo: "https://www.tsilimited.com/wp-content/uploads/2020/04/RTA-LOGO-1.png",
         text: "Secure storage - 235% Growth",
       },
+      {
+        logo: "https://www.tsilimited.com/wp-content/uploads/2020/04/RTA-LOGO-1.png",
+        text: "Secure storage - 235% Growth",
+      },
+      {
+        logo: "https://www.tsilimited.com/wp-content/uploads/2020/04/RTA-LOGO-1.png",
+        text: "Secure storage - 235% Growth",
+      },
+      {
+        logo: "https://www.tsilimited.com/wp-content/uploads/2020/04/RTA-LOGO-1.png",
+        text: "Secure storage - 235% Growth",
+      },
     ],
     ar: [
       {
@@ -80,6 +92,18 @@ const TestimonialSlider = () => {
       {
         logo: "https://gulfvisiongov.com/wp-content/uploads/2024/08/dubai-municipality-logo.png",
         text: "إدارة الفريق - نمو 195%",
+      },
+      {
+        logo: "https://www.tsilimited.com/wp-content/uploads/2020/04/RTA-LOGO-1.png",
+        text: "التخزين الآمن - نمو 235%",
+      },
+      {
+        logo: "https://www.tsilimited.com/wp-content/uploads/2020/04/RTA-LOGO-1.png",
+        text: "التخزين الآمن - نمو 235%",
+      },
+      {
+        logo: "https://www.tsilimited.com/wp-content/uploads/2020/04/RTA-LOGO-1.png",
+        text: "التخزين الآمن - نمو 235%",
       },
       {
         logo: "https://www.tsilimited.com/wp-content/uploads/2020/04/RTA-LOGO-1.png",
@@ -153,26 +177,48 @@ const TestimonialSlider = () => {
 
           {/* Company Details */}
           <div className="company-details--row">
-            {companies[language].map((company, index) => (
-              <div className="company-box" key={index}>
-                <div className="company-box-inner">
-                  <div className="company-box-top">
-                    <img
-                      src={company.logo}
-                      alt="Company Logo"
-                      style={{
-                        width: "33%",
-                        height: "100px",
-                        objectFit: "fill",
-                      }}
-                    />
+            <Swiper
+              key={swiperKey}
+              modules={[Autoplay]}
+              spaceBetween={30}
+              speed={3000}
+              slidesPerView={1}
+              loop
+              autoplay={{
+                delay: 1000,
+                disableOnInteraction: false,
+                reverseDirection: true, // Reverse the autoplay direction
+              }}
+              dir={language === "ar" ? "rtl" : "ltr"}
+              breakpoints={{
+                0: { slidesPerView: 1 },
+                768: { slidesPerView: 2 },
+                992: { slidesPerView: 3 },
+              }}
+            >
+              {companies[language].map((company, index) => (
+                <SwiperSlide key={index}>
+                  <div className="company-box">
+                    <div className="company-box-inner">
+                      <div className="company-box-top">
+                        <img
+                          src={company.logo}
+                          alt="Company Logo"
+                          style={{
+                            width: "33%",
+                            height: "100px",
+                            objectFit: "fill",
+                          }}
+                        />
+                      </div>
+                      <div className="company-box-bottom">
+                        <span>{company.text}</span>
+                      </div>
+                    </div>
                   </div>
-                  <div className="company-box-bottom">
-                    <span>{company.text}</span>
-                  </div>
-                </div>
-              </div>
-            ))}
+                </SwiperSlide>
+              ))}
+            </Swiper>
           </div>
         </div>
       </div>

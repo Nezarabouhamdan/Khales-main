@@ -6,8 +6,8 @@ import { useLanguage } from "../../Context/Languagecontext";
 const content = {
   eng: [
     {
-      title: "About",
-      green: "us",
+      title: "Khales",
+      green: "Group",
       content:
         "At Khales Project Management, we turn ideas into reality with expert architecture, construction, and fit-out solutions. Whether its a luxury development, commercial space, or residential project, we deliver turnkey solutions with precision, efficiency, and innovation. No delays, no compromises—just results that exceed expectations.",
       button: "Learn More",
@@ -15,8 +15,8 @@ const content = {
   ],
   ar: [
     {
-      title: "عن",
-      green: "الشركة",
+      title: "مجموعة",
+      green: "خالص",
       content:
         "تُعدّ خالص لإدارة المشاريع بوابتك لتحويل الأفكار إلى واقع ملموس، وذلك بتطبيق أعلى معايير الهندسة المعمارية والإنشاءات والتشطيبات الداخلية. سواء كان مشروعك فاخرًا، تجاريًا، أو سكنيًا، فإننا نقدم حلولًا متكاملة تتميز بالدقة والكفاءة والابتكار. نلتزم بتحقيق نتائج تتجاوز توقعاتك، دون أي تأخير أو تنازلات",
       button: "أعرف المزيد",
@@ -31,7 +31,7 @@ const TextContent = () => {
     <TextSection rtl={language === "ar"}>
       <Title>
         {selectedcontent[0].title}
-        <GreenText>&nbsp; {selectedcontent[0].green}</GreenText>
+        <GreenText> {selectedcontent[0].green}</GreenText>
       </Title>
       <Description>{selectedcontent[0].content}</Description>
       <LearnMoreButton
@@ -69,7 +69,7 @@ export const TextSection = styled.div`
 export const Title = styled.h1`
   font-size: 50px;
   font-weight: 600;
-  color: #545454;
+  color: rgb(0, 0, 0);
   margin-bottom: 20px;
   line-height: 60px;
   @media (max-width: 640px) {
@@ -78,15 +78,14 @@ export const Title = styled.h1`
 `;
 
 export const GreenText = styled.span`
-  color: #66a109;
+  color: rgb(0, 0, 0);
 `;
 
 const Description = styled.p`
   font-size: 16px;
-  line-height: 1.6;
-  color: #000000;
+  color: #838383;
   margin-bottom: 15px;
-
+  font-family: "Inter ";
   @media (max-width: 640px) {
     font-size: 14px;
   }
@@ -94,7 +93,8 @@ const Description = styled.p`
 
 const LearnMoreButton = styled.button`
   padding: 12px 30px;
-  background-color: #545454;
+  background-color: rgb(102, 161, 9);
+
   color: #ffffff;
   border: none;
   border-radius: 5px;

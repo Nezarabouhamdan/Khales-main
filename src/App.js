@@ -3,7 +3,6 @@ import { Globalstyle } from "./Globalstyles";
 import { BrowserRouter, Switch, Route } from "react-router-dom"; // Removed unused "Rotue" import
 import Home from "./Page/Home";
 import Navbar from "./components/Navbar/Navbar";
-import "./fonts/BebasNeue-Regular.ttf";
 import "./fonts/style.css";
 import Footer from "./components/Footer/Footer";
 import Projectspage from "./Page/Projectspage";
@@ -25,7 +24,7 @@ import { footerData } from "./data/FooterData";
 import Interiordesginpage from "./Page/Interiordesginpage";
 import Fitout from "./Page/Fit-out";
 import Realestate from "./Page/Realestate";
-import GalleryViewer from "./components/GalleryViewer/Galleryviwer";
+
 import { LanguageProvider } from "./Context/Languagecontext";
 import Booking from "./Page/Booking";
 import Analytics from "./Analytics";

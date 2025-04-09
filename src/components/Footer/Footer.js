@@ -189,9 +189,6 @@ const Footer = () => {
     <FooterContainer>
       <ContentWrapper>
         {/* Logo Section */}
-        <FooterLogo>
-          <SocialIcon src={logo}></SocialIcon>
-        </FooterLogo>
 
         {/* Branches Columns */}
         <Column>

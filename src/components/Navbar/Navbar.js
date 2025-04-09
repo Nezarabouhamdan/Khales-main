@@ -23,6 +23,33 @@ import useDeviceSize from "../../Page/WindowSize.js";
 import { useLanguage } from "../../Context/Languagecontext.js";
 
 const Navbar = () => {
+  const servicePaths = [
+    "/service",
+    "/ProjectManagement",
+    "/Developmentplanning",
+    "/ArchitectureDesign",
+    "/BuildingContracting",
+    "/EngineeringConsultancy",
+    "/InteriorDesign",
+    "/LandscapingDesign",
+    "/RealEstate",
+    "/Fit-OutDesign",
+  ];
+  const homePaths = ["/Contact", "/ABOUTUS", "/PROJECTS", "/"];
+  const isServicePath = () => {
+    return servicePaths.some(
+      (path) =>
+        location.pathname === path || location.pathname.startsWith(path + "/")
+    );
+  };
+
+  const isHomePath = () => {
+    return homePaths.some(
+      (path) =>
+        location.pathname === path || location.pathname.startsWith(path + "/")
+    );
+  };
+
   const [isSticky, setSticky] = useState(false);
   const { language, changeLanguage } = useLanguage();
   const location = useLocation();
@@ -142,53 +169,28 @@ const Navbar = () => {
     boxClass.push("");
   }
 
+  // State for Home dropdown
+  const [isMenuSubMenuHome, setMenuSubMenuHome] = useState(false);
+  const toggleSubmenuHome = () => {
+    setMenuSubMenuHome(!isMenuSubMenuHome);
+  };
+  let boxClassSubMenuHome = ["sub__menus"];
+  if (isMenuSubMenuHome) {
+    boxClassSubMenuHome.push("sub__menus__Active");
+  }
+
+  // Existing submenu states (keep Services and Language dropdown states)
   const [isMenuSubMenu, setMenuSubMenu] = useState(false);
-  const toggleSubmenu = () => {
-    setMenuSubMenu(isMenuSubMenu === false ? true : false);
-  };
+  const toggleSubmenu = () => setMenuSubMenu(!isMenuSubMenu);
   let boxClassSubMenu = ["sub__menus"];
-  if (isMenuSubMenu) {
-    boxClassSubMenu.push("sub__menus__Active");
-  } else {
-    boxClassSubMenu.push("");
-  }
-
-  const [isMenuSubMenu2, setMenuSubMenu2] = useState(false);
-  const toggleSubmenu2 = () => {
-    setMenuSubMenu2(isMenuSubMenu2 === false ? true : false);
-  };
-  let boxClassSubMenu2 = ["sub__menus"];
-  if (isMenuSubMenu2) {
-    boxClassSubMenu2.push("sub__menus__Active");
-  } else {
-    boxClassSubMenu2.push("");
-  }
-
-  const [isMenuSubMenu3, setMenuSubMenu3] = useState(false);
-  const toggleSubmenu3 = () => {
-    setMenuSubMenu3(isMenuSubMenu3 === false ? true : false);
-  };
-  let boxClassSubMenu3 = ["sub__menus"];
-  if (isMenuSubMenu3) {
-    boxClassSubMenu3.push("sub__menus__Active");
-  } else {
-    boxClassSubMenu3.push("");
-  }
+  if (isMenuSubMenu) boxClassSubMenu.push("sub__menus__Active");
 
   const [isMenuSubMenu4, setMenuSubMenu4] = useState(false);
-  const toggleSubmenu4 = () => {
-    setMenuSubMenu4(isMenuSubMenu4 === false ? true : false);
-  };
+  const toggleSubmenu4 = () => setMenuSubMenu4(!isMenuSubMenu4);
   let boxClassSubMenu4 = ["sub__menus"];
-  if (isMenuSubMenu4) {
-    boxClassSubMenu4.push("sub__menus__Active");
-  } else {
-    boxClassSubMenu4.push("");
-  }
+  if (isMenuSubMenu4) boxClassSubMenu4.push("sub__menus__Active");
 
-  const handleClick = () => {
-    setShow(!show);
-  };
+  const handleClick = () => setShow(!show);
 
   return (
     <Nav className={isSticky ? "sticky" : ""}>
@@ -201,47 +203,116 @@ const Navbar = () => {
         </MobileIcon>
         <NavMenu show={show}>
           <NavItem>
-            {useDeviceSize()[0] > "960" ? (
-              ""
-            ) : (
+            {useDeviceSize()[0] > "960" ? null : (
               <StyledButton style={{ margin: "auto" }}>
                 {language === "eng" ? "Book Consultation" : "أحجز موعدك الآن"}
               </StyledButton>
             )}
             <ul className={boxClass.join(" ")}>
-              <li className="menu-item">
-                <NavLink
-                  exact
-                  activeClassName="is-active"
-                  onClick={toggleClass}
-                  to={`/`}
-                >
-                  {" "}
+              {/* Home Dropdown */}
+              <li
+                onClick={toggleSubmenuHome}
+                className={`menu-item sub__menus__arrows ${
+                  isHomePath() ? "active-home" : ""
+                }`}
+              >
+                <Link to="/">
                   <Text
                     style={{
-                      color: location.pathname === "/" ? "#66a109" : "black",
+                      color: isHomePath() ? "#66a109" : "black",
                     }}
                   >
-                    {" "}
-                    {tabs[0]}{" "}
+                    {tabs[0]}
                   </Text>
-                </NavLink>
+                </Link>
+                <ul className={boxClassSubMenuHome.join(" ")}>
+                  <li>
+                    <NavLink
+                      exact
+                      to="/"
+                      onClick={toggleClass}
+                      activeClassName="is-active"
+                    >
+                      <Text
+                        style={{
+                          color:
+                            location.pathname === "/" ? "#66a109" : "black",
+                        }}
+                      >
+                        {tabs[0]}
+                      </Text>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to="/Contact"
+                      onClick={toggleClass}
+                      activeClassName="is-active"
+                    >
+                      <Text
+                        style={{
+                          color:
+                            location.pathname === "/Contact"
+                              ? "#66a109"
+                              : "black",
+                        }}
+                      >
+                        {tabs[12]}
+                      </Text>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to="/ABOUTUS"
+                      onClick={toggleClass}
+                      activeClassName="is-active"
+                    >
+                      <Text
+                        style={{
+                          color:
+                            location.pathname === "/ABOUTUS"
+                              ? "#66a109"
+                              : "black",
+                        }}
+                      >
+                        {tabs[13]}
+                      </Text>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to="/PROJECTS"
+                      onClick={toggleClass}
+                      activeClassName="is-active"
+                    >
+                      <Text
+                        style={{
+                          color:
+                            location.pathname === "/PROJECTS"
+                              ? "#66a109"
+                              : "black",
+                        }}
+                      >
+                        {tabs[11]}
+                      </Text>
+                    </NavLink>
+                  </li>
+                </ul>
               </li>
               <li
                 onClick={toggleSubmenu}
-                className="menu-item sub__menus__arrows"
+                className={`menu-item sub__menus__arrows ${
+                  isServicePath() ? "active-service" : ""
+                }`}
               >
-                {" "}
                 <Link to="/service">
-                  {" "}
                   <Text
                     style={{
-                      color:
-                        location.pathname === "/service" ? "#66a109" : "black",
+                      color: isServicePath() ? "#66a109" : "BLACK",
                     }}
                   >
                     {tabs[1]}
-                  </Text>{" "}
+                  </Text>
                 </Link>
                 <ul className={boxClassSubMenu.join(" ")}>
                   <li>
@@ -427,69 +498,18 @@ const Navbar = () => {
                   </li>
                 </ul>
               </li>{" "}
-              <li className="menu-item">
-                <NavLink
-                  exact
-                  activeClassName="is-active"
-                  onClick={toggleClass}
-                  to={`/PROJECTS`}
-                >
-                  {" "}
-                  <Text
-                    style={{
-                      color:
-                        location.pathname === "/PROJECTS" ? "#66a109" : "black",
-                    }}
-                  >
-                    {" "}
-                    {tabs[11]}{" "}
-                  </Text>
-                </NavLink>
-              </li>
-              <li className="menu-item">
-                <NavLink
-                  exact
-                  activeClassName="is-active"
-                  onClick={toggleClass}
-                  to={`/Contact`}
-                >
-                  {" "}
-                  <Text
-                    style={{
-                      color:
-                        location.pathname === "/Contact" ? "#66a109" : "black",
-                    }}
-                  >
-                    {" "}
-                    {tabs[12]}{" "}
-                  </Text>
-                </NavLink>
-              </li>
-              <li className="menu-item">
-                <NavLink
-                  exact
-                  activeClassName="is-active"
-                  onClick={toggleClass}
-                  to={`/ABOUTUS`}
-                >
-                  {" "}
-                  <Text
-                    style={{
-                      color:
-                        location.pathname === "/ABOUTUS" ? "#66a109" : "black",
-                    }}
-                  >
-                    {" "}
-                    {tabs[13]}{" "}
-                  </Text>
-                </NavLink>
-              </li>
               <li
                 onClick={toggleSubmenu4}
                 className="menu-item sub__menus__arrows"
               >
                 <Link to="#">
-                  <Text>{tabs[15]}</Text>
+                  <Text
+                    style={{
+                      color: location.pathname === "/sss" ? "#66a109" : "black",
+                    }}
+                  >
+                    {tabs[15]}
+                  </Text>
                 </Link>
                 <ul className={boxClassSubMenu4.join(" ")}>
                   <li>
@@ -505,7 +525,14 @@ const Navbar = () => {
                         color: language === "ar" ? "#66a109" : "black",
                       }}
                     >
-                      <Text>{tabs[16]}</Text>
+                      <Text
+                        style={{
+                          color:
+                            location.pathname === "/sss" ? "#66a109" : "black",
+                        }}
+                      >
+                        {tabs[16]}
+                      </Text>
                     </button>
                   </li>
                   <li>
@@ -521,7 +548,14 @@ const Navbar = () => {
                         color: language === "eng" ? "#66a109" : "black",
                       }}
                     >
-                      <Text>{tabs[17]}</Text>
+                      <Text
+                        style={{
+                          color:
+                            location.pathname === "/sss" ? "#66a109" : "black",
+                        }}
+                      >
+                        {tabs[17]}
+                      </Text>
                     </button>
                   </li>
                 </ul>

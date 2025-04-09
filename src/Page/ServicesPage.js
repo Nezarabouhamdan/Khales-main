@@ -9,6 +9,7 @@ import { useLanguage } from "../Context/Languagecontext";
 import { slides } from "../data/Servicessliderdata";
 import { servicesData } from "../data/servicesdata";
 import { Helmet } from "react-helmet-async";
+import useDeviceSize from "./WindowSize";
 
 const IconWrapper = styled.div`
   position: absolute;
@@ -64,7 +65,8 @@ export const Icon = styled.a`
 function ServicesPage() {
   const { language } = useLanguage();
   const [isLoading, setIsLoading] = useState(true);
-
+  const width = useDeviceSize()[0];
+  console.log(width);
   // Get translated services data array (flat list)
   const services = servicesData[language] || servicesData["eng"];
 
@@ -79,7 +81,7 @@ function ServicesPage() {
       arr.slice(i * size, i * size + size)
     );
 
-  const serviceChunks = chunkArray(services, 3);
+  const serviceChunks = chunkArray(services, width > 1303 ? 3 : 2);
 
   return (
     <>

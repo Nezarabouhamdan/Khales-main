@@ -55,7 +55,7 @@ body {
 }
 .swiper-slide--inner .testimonial-detail p {
   margin: 0px;
-  color: #66a109;
+  color: #000000;
   font-size: 18px;
   line-height: 30px;
   font-weight: 500;
@@ -76,7 +76,7 @@ body {
 }
 .company-details--row .company-box {
   flex: 0 0 auto;
-  width: 33.33333333%;
+  width: 99.33333333%;
   padding: 0px 15px;
 }
 .company-details--row .company-box .company-box-inner {

@@ -5,7 +5,6 @@ import styled from "styled-components";
 import { GreenText, Title } from "../Whoweare/TextContent";
 import { useLanguage } from "../../Context/Languagecontext";
 
-// Content data for both languages
 const contactData = {
   eng: {
     header: {
@@ -32,6 +31,7 @@ const contactData = {
       inquiryPlaceholder: "Type of Inquiry",
       namePlaceholder: "Full Name",
       emailPlaceholder: "Email",
+      phonePlaceholder: "Phone Number",
       messagePlaceholder: "Message",
       submitText: "Submit",
       inquiryOptions: [
@@ -53,22 +53,22 @@ const contactData = {
       general: {
         title: "استفسارات عامة",
         email: "info@khales.ae",
-        phone: "+971 4 557 1184", // Keep original LTR format
+        phone: "+971 4 557 1184",
       },
       customer: {
         title: "خدمة العملاء على مدار الساعة",
-        phone: "+971 55 129 9880", // Keep original LTR format
+        phone: "+971 55 129 9880",
       },
       hours: {
         title: "ساعات العمل",
         text: "من الأحد إلى الخميس - 9:00 صباحًا - 6:00 مساءً",
       },
     },
-
     form: {
       inquiryPlaceholder: "نوع الاستفسار",
       namePlaceholder: "الاسم الكامل",
       emailPlaceholder: "البريد الإلكتروني",
+      phonePlaceholder: "رقم الهاتف",
       messagePlaceholder: "الرسالة",
       submitText: "إرسال",
       inquiryOptions: [
@@ -125,21 +125,77 @@ function ContactUs() {
 
 const ContactForm = ({ content, rtl }) => {
   const [isInquiryOpen, setIsInquiryOpen] = useState(false);
-  const [selectedInquiry, setSelectedInquiry] = useState("");
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    message: "",
+    inquiry: "",
+    branch: "Main Branch",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null);
+
+  const handleInputChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleInquirySelect = (option) => {
-    setSelectedInquiry(option);
+    setFormData({ ...formData, inquiry: option });
     setIsInquiryOpen(false);
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+
+    try {
+      const response = await fetch("http://localhost:3000/api/create-lead", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          phone: formData.phone,
+          email: formData.email,
+          description: formData.message,
+          inquiry: formData.inquiry,
+          branch: formData.branch,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setSubmitStatus("success");
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          message: "",
+          inquiry: "",
+          branch: "Main Branch",
+        });
+      } else {
+        setSubmitStatus("error");
+      }
+    } catch (error) {
+      setSubmitStatus("error");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
-    <Form>
+    <Form onSubmit={handleSubmit}>
       <FormGroup>
         <DropdownContainer>
           <DropdownInput
             type="text"
             placeholder={content.inquiryPlaceholder}
-            value={selectedInquiry}
+            value={formData.inquiry}
             onClick={() => setIsInquiryOpen(!isInquiryOpen)}
             readOnly
             rtl={rtl}
@@ -161,30 +217,72 @@ const ContactForm = ({ content, rtl }) => {
       <FormGroup>
         <FormInput
           type="text"
+          name="name"
           placeholder={content.namePlaceholder}
+          value={formData.name}
+          onChange={handleInputChange}
+          required
           rtl={rtl}
         />
       </FormGroup>
       <FormGroup>
         <FormInput
           type="email"
+          name="email"
           placeholder={content.emailPlaceholder}
+          value={formData.email}
+          onChange={handleInputChange}
+          required
           rtl={rtl}
         />
       </FormGroup>
       <FormGroup>
         <FormInput
-          type="text"
-          placeholder={content.messagePlaceholder}
+          type="tel"
+          name="phone"
+          placeholder={content.phonePlaceholder}
+          value={formData.phone}
+          onChange={handleInputChange}
+          required
           rtl={rtl}
         />
       </FormGroup>
-      <SubmitButton type="submit">{content.submitText}</SubmitButton>
+      <FormGroup>
+        <FormTextarea
+          rows="4"
+          name="message"
+          placeholder={content.messagePlaceholder}
+          value={formData.message}
+          onChange={handleInputChange}
+          required
+          rtl={rtl}
+        />
+      </FormGroup>
+
+      {submitStatus === "success" && (
+        <SuccessMessage>
+          {rtl ? "تم الإرسال بنجاح!" : "Message sent successfully!"}
+        </SuccessMessage>
+      )}
+
+      {submitStatus === "error" && (
+        <ErrorMessage>
+          {rtl ? "حدث خطأ أثناء الإرسال" : "Error sending message"}
+        </ErrorMessage>
+      )}
+
+      <SubmitButton type="submit" disabled={isSubmitting}>
+        {isSubmitting
+          ? rtl
+            ? "جاري الإرسال..."
+            : "Sending..."
+          : content.submitText}
+      </SubmitButton>
     </Form>
   );
 };
 
-// Styled Components (updated for RTL support)
+// Styled Components
 const ContactSection = styled.section`
   display: flex;
   flex-direction: column;
@@ -210,10 +308,12 @@ const ContactHeader = styled.header`
   align-items: center;
   text-align: ${(props) => (props.dir === "rtl" ? "right" : "left")};
 `;
+
 const LtrText = styled.span`
   direction: ltr;
   unicode-bidi: embed;
 `;
+
 const ContactDescription = styled.p`
   font-size: 16px;
   color: #666;
@@ -259,6 +359,25 @@ const FormInput = styled.input`
   }
 `;
 
+const FormTextarea = styled.textarea`
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  border-bottom: 1px solid #333;
+  background-color: transparent;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.3s ease;
+  text-align: ${(props) => (props.rtl ? "right" : "left")};
+  direction: ${(props) => (props.rtl ? "rtl" : "ltr")};
+  resize: vertical;
+  min-height: 100px;
+
+  &:focus {
+    border-bottom: 2px solid #66a109;
+  }
+`;
+
 const DropdownInput = styled(FormInput)`
   cursor: pointer;
 `;
@@ -280,8 +399,20 @@ const DropdownMenu = styled.ul`
   text-align: ${(props) => (props.rtl ? "right" : "left")};
 `;
 
+const SuccessMessage = styled.div`
+  color: #66a109;
+  padding: 10px;
+  text-align: center;
+`;
+
+const ErrorMessage = styled.div`
+  color: #ff4444;
+  padding: 10px;
+  text-align: center;
+`;
+
 const SubmitButton = styled.button`
-  background-color: #666;
+  background-color: ${(props) => (props.disabled ? "#cccccc" : "#666")};
   color: #ffffff;
   padding: 12px 32px;
   border-radius: 4px;
@@ -289,13 +420,13 @@ const SubmitButton = styled.button`
   font-weight: 500;
   margin-top: 16px;
   transition: all 0.2s ease;
-  align-self: ${(props) => (props.rtl ? "flex-end" : "flex-start")};
   width: 25%;
   border: none;
-  cursor: pointer;
+  cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
+  align-self: ${(props) => (props.rtl ? "flex-end" : "flex-start")};
 
   &:hover {
-    background-color: #555;
+    background-color: ${(props) => (props.disabled ? "#cccccc" : "#555")};
   }
 
   @media (max-width: 768px) {
@@ -304,21 +435,6 @@ const SubmitButton = styled.button`
 
   @media (max-width: 480px) {
     width: 100%;
-  }
-`;
-
-// ... (keep all other styled components the same as in your original code)
-
-const ContactTitle = styled.h1`
-  font-size: 48px;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 16px;
-  @media (max-width: 991px) {
-    font-size: 40px;
-  }
-  @media (max-width: 640px) {
-    font-size: 32px;
   }
 `;
 
